@@ -398,9 +398,28 @@ class ScarfDocument(BeanieDocument):
             skip: int | None = None,
             limit: int | None = None,
             random_sample: bool = False,
-            get_as_str: bool = False,
+            return_as_str: bool = False,
             id_field: str = '_id'
-    ) -> list[ObjectId]:
+    ) -> list[ObjectId] | list[str]:
+        """Returns only the ids of found records.
+
+        Finds the target records based on the args and groups them all to produce a list that contains
+        all of their ids from the target id field.
+
+        Args:
+            filters: MongoDB filters to use for finding records.
+            sort_key: Field name to sort the records based on it.
+            sort_order: Ascending or descending sort order.
+            skip: Number of records to skip.
+            limit: Number of records to return.
+            random_sample: Return random records.
+            return_as_str: Convert the ids to string in the output.
+                (useful when they are in ObjectId or int format, but you want string output)
+            id_field: Target field to get the ids from.
+
+        Returns:
+            List of found ids in form of ObjectIds or converted to string if get_as_str is True.
+        """
         if random_sample and not limit:
             raise ValueError('`limit` arg must be passed when `random_sample` is True.')
 
@@ -410,7 +429,7 @@ class ScarfDocument(BeanieDocument):
         if random_sample:
             specify_desired_records_pipeline += cls.get_random_sample_pipeline(limit)
 
-        if get_as_str:
+        if return_as_str:
             final_pipeline = specify_desired_records_pipeline \
                              + cls.get_projection_pipeline({'id'}, links_are_fetched=False) \
                              + cls.get_group_all_pipeline(id_field)
