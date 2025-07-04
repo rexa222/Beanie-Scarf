@@ -2,7 +2,7 @@ from datetime import date
 
 from pydantic.fields import FieldInfo
 
-from dataflake.tools import simplify_special_annotations
+from scarf.tools.annotation_simplifier import simplify_special_annotations
 
 
 def get_projection_value_by_annotation(

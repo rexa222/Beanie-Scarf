@@ -6,7 +6,7 @@ from pydantic.fields import FieldInfo
 from pydantic import BaseModel, create_model, StringConstraints, Field
 from beanie import Link, PydanticObjectId as ObjectId
 
-from dataflake.tools.annotation_simplifier import simplify_special_annotations
+from scarf.tools.annotation_simplifier import simplify_special_annotations
 
 
 def get_projection_view(

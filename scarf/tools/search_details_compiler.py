@@ -1,6 +1,6 @@
 from re import escape as escape_re_special_characters
 
-from dataflake.data_models import SearchDetails
+from scarf.utils.dynamic_filtering import SearchDetails
 
 
 def compile_search_details_to_pattern(search_details: SearchDetails | list[SearchDetails]) -> str:
