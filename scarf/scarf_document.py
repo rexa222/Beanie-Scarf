@@ -9,7 +9,7 @@ from pydantic import BaseModel, create_model
 
 from scarf.tools import get_projection_view, get_projection_value_by_annotation, get_sort_dict_for_pipeline, \
     compile_search_details_to_pattern, get_set_of_object_ids, get_class
-from scarf.utils import LinkInfo, AdvancedFilters, FilterableFieldInfo, SearchDetails
+from scarf.utils import LinkInfo, DependantDocInfo, AdvancedFilters, FilterableFieldInfo, SearchDetails
 
 
 class ScarfDocument(BeanieDocument):
@@ -22,7 +22,9 @@ class ScarfDocument(BeanieDocument):
 
     # All fields that are linked to other documents info must be contained in this list for dynamic projections to work:
     __linked_fields_info__: list[LinkInfo] = None
-    __dependent_models_info__: list[LinkInfo] = None
+
+    # The info of the classes that have links to this class; necessary for `get_dependent_records_count_per_model`:
+    __dependent_models_info__: list[DependantDocInfo] = None
 
     __sortable_fields__: tuple[str] = None  # Include ALIASES if exists (DB field not model field)
     __special_sortable_fields__: tuple[str] = None  # Fields' existence in the model won't be checked if included here
@@ -530,3 +532,36 @@ class ScarfDocument(BeanieDocument):
             missing_records = list(records_list)
 
         return missing_records
+
+    @classmethod
+    async def get_dependent_records_count_per_model(cls, record_id: ObjectId) -> dict[str, int]:
+        """Finds count of dependant records in dependant documents.
+
+        Finds the count of links to the record with given ID in each document that has links to the current document.
+
+        Args:
+            record_id: ID of the record to find links to.
+
+        Returns:
+            A dictionary with the dependant document names as key and the count of links to the record as value.
+        """
+        if not cls.__dependent_models_info__:
+            return {}
+
+        linked_records = {}
+
+        for dependant_doc_info in cls.__dependent_models_info__:
+            linked_cls = get_class(dependant_doc_info.module_address, dependant_doc_info.document_name)
+
+            pipeline = [
+                {'$match': {
+                    f'{dependant_doc_info.field_name}.$id': {'$in': [record_id]}
+                }},
+                {'$count': 'count'}
+            ]
+
+            count_aggregation_result = await linked_cls.aggregate(pipeline).to_list()
+            if count_aggregation_result:
+                linked_records[dependant_doc_info.linked_document] = count_aggregation_result[0]['count']
+
+        return linked_records
