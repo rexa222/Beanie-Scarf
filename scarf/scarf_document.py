@@ -103,7 +103,7 @@ class ScarfDocument(BeanieDocument):
             for k, v in _cls.__filterable_fields_info__.items()
         }
 
-    # ----- HIERARCHICAL ATTRIBUTES -----
+    # ----- SCHEMAS & VIEWS -----
 
     @classmethod
     def get_schema_for_filters(cls) -> Type[BaseModel]:
@@ -505,7 +505,7 @@ class ScarfDocument(BeanieDocument):
     async def check_records_existence(
             cls, record_id_or_list: ObjectId | list[ObjectId] | set[ObjectId], filters: dict | None = None
     ) -> list[ObjectId] | None:
-        """Checks existence of records from this document in DB.
+        """Checks existence of records from this document in the database.
 
         Can be used to validate existence of ids that are linked to this document in other documents; and more.
 
