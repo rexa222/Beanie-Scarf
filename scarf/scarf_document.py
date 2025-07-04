@@ -406,7 +406,7 @@ class ScarfDocument(BeanieDocument):
         """Returns only the ids of found records.
 
         Finds the target records based on the args and groups them all to produce a list that contains
-        all of their ids from the target id field.
+        all of their IDs from the target ID field.
 
         Args:
             filters: MongoDB filters to use for finding records.
@@ -508,7 +508,7 @@ class ScarfDocument(BeanieDocument):
         Can be used to validate existence of ids that are linked to this document in other documents; and more.
 
         Args:
-            record_id_or_list: An object id or a list of them to check.
+            record_id_or_list: An ObjectId or a list of them to check.
             filters: Extra filters for finding documents under those conditions.
 
         Returns:
