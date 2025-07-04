@@ -5,7 +5,7 @@ from typing import Any, Self, Type, Literal, Optional
 from beanie import Document as BeanieDocument, PydanticObjectId as ObjectId
 from beanie.odm.queries.aggregation import AggregationQuery
 from beanie.operators import In, All, Eq
-from pydantic import BaseModel, create_model
+from pydantic import BaseModel, create_model, model_validator
 
 from scarf.tools import get_projection_view, get_projection_value_by_annotation, get_sort_dict_for_pipeline, \
     compile_search_details_to_pattern, get_set_of_object_ids, get_class
@@ -33,6 +33,12 @@ class ScarfDocument(BeanieDocument):
 
     __never_fetch_fields__: tuple[str] = tuple()
     __always_fetch_fields__: tuple[str] = tuple()
+
+    @model_validator(mode='after')
+    def validate_linked_values_existence(self):
+        for link_info in self.__linked_fields_info__:
+            if link_info.validate_dynamically:
+                link_info.linked_document.validate_records_existence(getattr(self, link_info.field_name))
 
     # ----- HIERARCHICAL ATTRIBUTES -----
 
