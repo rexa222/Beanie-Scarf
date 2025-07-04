@@ -534,6 +534,25 @@ class ScarfDocument(BeanieDocument):
         return missing_records
 
     @classmethod
+    async def validate_records_existence(
+            cls, record_id_or_list: ObjectId | list[ObjectId] | set[ObjectId], filters: dict | None = None
+    ) -> None:
+        """Checks existence of records from this document in the database and raises ValueError in case of missing
+        records.
+
+        Args:
+            record_id_or_list: Linked object id or a list of them.
+            filters: Extra filters to pass for finding linked documents.
+
+        Raises:
+            ValueError: If any of the records with given IDs are not found in the database.
+        """
+        missing_records = await cls.check_records_existence(record_id_or_list, filters)
+
+        if missing_records:
+            raise ValueError(f'{cls.__name__} instances with _ids {missing_records} do not exist in the database.')
+
+    @classmethod
     async def get_dependent_records_count_per_model(cls, record_id: ObjectId) -> dict[str, int]:
         """Finds count of dependant records in dependant documents.
 
