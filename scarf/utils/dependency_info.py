@@ -9,8 +9,9 @@ if TYPE_CHECKING:
 class LinkInfo(BaseModel):
     linked_document: Type[ScarfDocument]
     field_name: str
-    is_list: bool = Field(default=False, description='Weather the linked field annotation is a list of links')
-    validate_dynamically: bool = True
+    is_list: bool = Field(default=False, description='The linked field annotation is a list of links or not')
+    validate_existence: bool = Field(default=True, description='The existence must be validated dynamically in '
+                                                               '`validate_linked_values_existence` or not')
 
 
 class DependantDocInfo(BaseModel):
