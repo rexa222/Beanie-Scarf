@@ -231,12 +231,12 @@ class ScarfDocument(BeanieDocument):
             for link_info in cls.get_linked_fields_info():
                 if (
                         link_info.field_name in fields_to_be_fetched and
-                        cls.__db_name__ == getattr(link_info.linked_class, '__db_name__', None)
+                        cls.__db_name__ == getattr(link_info.linked_document, '__db_name__', None)
                 ):
-                    compact_fields = link_info.linked_class.__main_fields_for_compact_view__
+                    compact_fields = link_info.linked_document.__main_fields_for_compact_view__
 
-                    link_projection_pipeline = link_info.linked_class.get_projection_pipeline_for_linked_field(
-                        compact_fields or link_info.linked_class.get_default_projection_fields(),
+                    link_projection_pipeline = link_info.linked_document.get_projection_pipeline_for_linked_field(
+                        compact_fields or link_info.linked_document.get_default_projection_fields(),
                         link_info.field_name,
                         link_info.is_list
                     )

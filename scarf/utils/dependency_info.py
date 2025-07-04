@@ -1,15 +1,15 @@
 from typing import Type, TYPE_CHECKING
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 if TYPE_CHECKING:
     from scarf.scarf_document import ScarfDocument
 
 
 class LinkInfo(BaseModel):
-    linked_class: Type[ScarfDocument] | Type[BaseModel] | str
+    linked_document: Type[ScarfDocument]
     field_name: str
-    is_list: bool = False
+    is_list: bool = Field(default=False, description='Weather the linked field annotation is a list of links')
     validate_dynamically: bool = True
 
 
