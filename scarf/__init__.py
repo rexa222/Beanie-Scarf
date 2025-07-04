@@ -1,0 +1,1 @@
+from scarf.scarf_document import ScarfDocument as Document
