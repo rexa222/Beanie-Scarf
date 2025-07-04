@@ -16,9 +16,11 @@ class ScarfDocument(BeanieDocument):
     __db_name__: str
 
     __fields_to_exclude__: tuple[str] = ('revision_id',)  # MODEL FIELD NAMES, not the aliases
+
     # When the class is linked in another class and is fetched, only these fields will be shown:
     __main_fields_for_compact_view__: tuple[str] | None = None  # MODEL FIELD NAMES, not the aliases
 
+    # All fields that are linked to other documents info must be contained in this list for dynamic projections to work:
     __linked_fields_info__: list[LinkInfo] = None
     __dependent_models_info__: list[LinkInfo] = None
 
