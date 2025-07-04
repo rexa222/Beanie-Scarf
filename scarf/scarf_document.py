@@ -501,12 +501,16 @@ class ScarfDocument(BeanieDocument):
     async def check_records_existence(
             cls, record_id_or_list: ObjectId | list[ObjectId] | set[ObjectId], filters: dict | None = None
     ) -> list[ObjectId] | None:
-        """Checks existence of linked object ids from the linked document model in database and returns list of
-        missing links.
+        """Checks existence of records from this document in DB.
+
+        Can be used to validate existence of ids that are linked to this document in other documents; and more.
 
         Args:
             record_id_or_list: An object id or a list of them to check.
-            filters: Extra filters to pass for finding linked documents.
+            filters: Extra filters for finding documents under those conditions.
+
+        Returns:
+            List of the passed ids that was not found in case there were any, None otherwise.
         """
         if not record_id_or_list:
             return None
