@@ -13,7 +13,7 @@ from scarf.utils import LinkInfo, DependantDocInfo, AdvancedFilters, FilterableF
 
 
 class ScarfDocument(BeanieDocument):
-    __db_name__: str
+    __db_name__: str  # Can be used for dynamic initialization
 
     __fields_to_exclude__: tuple[str] = ('revision_id',)  # MODEL FIELD NAMES, not the aliases
 
