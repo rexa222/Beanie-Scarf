@@ -138,7 +138,7 @@ class ScarfDocument(BeanieDocument):
             use_aliases: bool = False,
             view_model_name: str | None = None
     ) -> Type[BaseModel]:
-        """Returns a projection model from the model with the desired fields only.
+        """Creates a projection model that contains only the desired fields from the document.
 
         Args:
             desired_fields: Name of the fields from model to exist in the output view model.
@@ -153,6 +153,9 @@ class ScarfDocument(BeanieDocument):
             use_aliases: If True, the aliases of fields (if exist) will be used as field names in the output view model.
             view_model_name: The name of the returned class, `View` will be concatenated to the model name if nothing
                 passed.
+
+        Returns:
+            A pydantic base model that contains only the desired fields.
         """
         return get_projection_view(
             cls, desired_fields, custom_fields_annotations, all_fields_as_optional, must_be_required_fields,
