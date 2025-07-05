@@ -23,14 +23,17 @@ class ScarfDocument(BeanieDocument):
     # All fields that are linked to other documents info must be contained in this list for dynamic projections to work:
     __linked_fields_info__: list[LinkInfo] = None
 
-    # The info of the classes that have links to this class; necessary for `get_dependent_records_count_per_model`:
+    # Info of the classes that have links to this class; necessary for `get_dependent_records_count_per_model`:
     __dependent_models_info__: list[DependantDocInfo] = None
 
+    # Info of the fields that document records can be sorted with:
     __sortable_fields__: tuple[str] = None  # Include ALIASES if exists (DB field not model field)
     __special_sortable_fields__: tuple[str] = None  # Fields' existence in the model won't be checked if included here
 
+    # Info of the fields that document records can be filtered with (allows handling filters dynamically):
     __filterable_fields_info__: dict[str, FilterableFieldInfo] | None = None
 
+    # Fields to never or always fetch, despite the value of `fetch_links` arg in `advanced_find`:
     __never_fetch_fields__: tuple[str] = tuple()
     __always_fetch_fields__: tuple[str] = tuple()
 
@@ -167,7 +170,7 @@ class ScarfDocument(BeanieDocument):
                 passed.
 
         Returns:
-            A pydantic base model that contains only the desired fields.
+            A pydantic BaseModel that contains only the desired fields.
         """
         return get_projection_view(
             cls, desired_fields, custom_fields_annotations, all_fields_as_optional, must_be_required_fields,
