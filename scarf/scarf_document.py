@@ -43,13 +43,18 @@ class ScarfDocument(BeanieDocument):
     # ----- HIERARCHICAL ATTRIBUTES -----
 
     @classmethod
-    def get_fields_to_exclude(cls, temp_exclude: str | set[str] | None = None) -> set:
-        """Returns a list of field names that should not be included in any of model projections based on
-        __fields_to_exclude__ attribute.
+    def get_fields_to_exclude(cls, temp_exclude: str | set[str] | None = None) -> set[str]:
+        """Field names that should not be included in document projections.
+
+        Combines all `__fields_to_exclude__` attribute in every child class in the hierarchy.
+        The mentioned attribute must contain MODEL FIELD NAMES, not the aliases; or else they will not be excluded.
 
         Args:
-            temp_exclude: Temporary adds the given value(s) on top of the default fields to be excluded.
+            temp_exclude: Temporary adds the given value(s) to the default fields to be excluded.
                 make sure to pass MODEL FIELD NAMES, not the aliases.
+
+        Returns:
+            A set of field names that should not be included in document projections
         """
         fields_to_exclude = {
             field
