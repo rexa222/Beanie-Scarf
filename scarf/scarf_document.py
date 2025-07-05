@@ -118,7 +118,7 @@ class ScarfDocument(BeanieDocument):
 
     @classmethod
     def get_schema_for_filters(cls) -> Type[BaseModel]:
-        """Returns a model for advanced filters in getting records."""
+        """Returns a model for dynamic filters in getting records based on defined filterable fields info."""
         schema_model_fields = {
             field_name: (Optional[field_info.annotation], None)
             for field_name, field_info in cls.get_filterable_fields_info().items()
