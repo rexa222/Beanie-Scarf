@@ -90,7 +90,7 @@ class ScarfDocument(BeanieDocument):
         ]
 
     @classmethod
-    def get_sortable_fields(cls) -> Type[Literal]:
+    def get_sortable_fields(cls) -> Literal:
         """All fields that records can be sorted with.
 
         Combines all `__sortable_fields__` attribute in every child class in the hierarchy.
