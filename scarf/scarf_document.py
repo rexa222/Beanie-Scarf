@@ -87,8 +87,14 @@ class ScarfDocument(BeanieDocument):
         ]
 
     @classmethod
-    def get_sortable_fields(cls):
-        """Returns sortable fields as a literal."""
+    def get_sortable_fields(cls) -> Type[Literal]:
+        """All fields that records can be sorted with.
+
+        Combines all `__sortable_fields__` attribute in every child class in the hierarchy.
+
+        Returns:
+            Sortable fields as a literal.
+        """
         sortable_fields = tuple(dict.fromkeys(
             field
             for _cls in reversed(cls.mro()[:-10])
