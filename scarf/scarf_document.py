@@ -121,7 +121,13 @@ class ScarfDocument(BeanieDocument):
 
     @classmethod
     def get_filterable_fields_info(cls) -> dict[str, FilterableFieldInfo]:
-        """Returns info about fields in the document model that are filterable in finding records."""
+        """Info of the fields that document records can be filtered with.
+
+        Combines all `__filterable_fields_info__` attribute in every child class in the hierarchy.
+
+        Returns:
+            A dict with fields as key and their info in form of `FilterableFieldInfo` objects as value.
+        """
         return {
             k: v
             for _cls in reversed(cls.mro()[:-10])
