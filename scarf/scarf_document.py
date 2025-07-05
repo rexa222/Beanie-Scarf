@@ -44,7 +44,7 @@ class ScarfDocument(BeanieDocument):
 
     @classmethod
     def get_fields_to_exclude(cls, temp_exclude: str | set[str] | None = None) -> set[str]:
-        """Field names that should not be included in document projections.
+        """Fields that should not be included in document projections.
 
         Combines all `__fields_to_exclude__` attribute in every child class in the hierarchy.
         The mentioned attribute must contain MODEL FIELD NAMES, not the aliases; or else they will not be excluded.
@@ -70,7 +70,13 @@ class ScarfDocument(BeanieDocument):
 
     @classmethod
     def get_linked_fields_info(cls) -> list[LinkInfo]:
-        """Returns info about fields in the document model that are linked to other documents."""
+        """Info of fields in the document that are linked to other documents.
+
+        Combines all `__linked_fields_info__` attribute in every child class in the hierarchy.
+
+        Returns:
+            A list of `LinkInfo` objects.
+        """
         prevent_duplicate = set()
         return [
             link_info
